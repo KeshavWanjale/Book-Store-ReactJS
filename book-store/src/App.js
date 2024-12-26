@@ -1,9 +1,9 @@
-import NavBar from "./components/navBar/NavBar";
+import RoutingMoudule from "./RoutingMoudule";
 
 function App() {
   return (
     <div>
-      <NavBar />
+      <RoutingMoudule />
     </div>
   );
 }

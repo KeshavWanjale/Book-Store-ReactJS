@@ -12,6 +12,7 @@ import {
     ShoppingCart,
 } from "@mui/icons-material";
 import "./NavBar.css";
+import bookImage from '../../assets/education/education.png'
 
 export default function NavBar() {
     return (
@@ -19,7 +20,7 @@ export default function NavBar() {
             <Toolbar className="toolbar">
 
                 <div className="logo-name">
-                    <img className="logo" src='book-store\src\assets\education\education.png' alt='book' />
+                    <img className="logo" src={bookImage} alt='book' />
 
                     <Typography variant="h6" className="title">
                         BookStore
