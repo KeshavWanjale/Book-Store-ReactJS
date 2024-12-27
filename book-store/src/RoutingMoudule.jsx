@@ -15,7 +15,7 @@ export default function RoutingMoudule() {
                     element: <BookContainer />,
                 },
                 {
-                    path: "/details",
+                    path: "/books/:id",
                     element: <BookDetails />,
                 }
             ],

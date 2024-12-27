@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "../bookDetails/BookDetail.css"
+import { useParams } from "react-router-dom";
 import {
     Container,
     Typography,
@@ -14,19 +15,26 @@ import { Rating } from "@mui/material";
 import bookImage from '../../assets/education/education.png'
 
 export default function BookDetails() {
+    const { id } = useParams();
+    const books = getBookList();
+
     const [isInBag, setIsInBag] = useState(false);
 
     const addToBag = () => {
         setIsInBag(true);
     };
 
-    const book = {
-        bookName: "Default Book Name",
-        author: "Default Author",
-        description: "Default description for the book.",
-        price: "2000",
-        rating: "4",
-        reviews: "50"
+    // Find the book based on the `id` parameter
+    const book = books.find((book) => book.id === parseInt(id));
+
+    if (!book) {
+        return (
+            <Container>
+                <Typography variant="h4" sx={{ marginTop: "4rem" }}>
+                    Book not found!
+                </Typography>
+            </Container>
+        );
     }
 
     return (
@@ -43,7 +51,7 @@ export default function BookDetails() {
                     >
                         <img
                             src={bookImage}
-                            alt={book.bookName}
+                            alt={book.name}
                             style={{ width: "100%", borderRadius: "5px" }}
                         />
                     </div>
@@ -80,15 +88,15 @@ export default function BookDetails() {
                 </Grid>
                 <Grid item xs={12} md={8}>
                     <Typography variant="h4" gutterBottom>
-                        {book.bookName}
+                        {book.name}
                     </Typography>
                     <Typography variant="subtitle1" gutterBottom>
                         by {book.author}
                     </Typography>
                     <Box display="flex" alignItems="center" mt={2}>
-                        <Rating value={book.rating} precision={0.5} readOnly />
+                        <Rating value={3.5} precision={0.5} readOnly />
                         <Typography variant="body2" ml={1}>
-                            ({book.reviews})
+                            ({29})
                         </Typography>
                     </Box>
                     <Box display="flex" alignItems="center" mt={2}>
@@ -180,4 +188,81 @@ export default function BookDetails() {
             </Grid>
         </Container>
     );
+}
+
+function getBookList() {
+    return [
+        {
+            "id": 1,
+            "name": "Book1",
+            "author": "Author 1",
+            "description": "A thrilling mystery novel.",
+            "user": 1,
+            "price": 250,
+            "stock": 120
+        },
+        {
+            "id": 2,
+            "name": "Book2",
+            "author": "Author 2",
+            "description": "An inspiring self-help guide.",
+            "user": 2,
+            "price": 300,
+            "stock": 80
+        },
+        {
+            "id": 3,
+            "name": "Book3",
+            "author": "Author 3",
+            "description": "A deep dive into ancient history.",
+            "user": 1,
+            "price": 400,
+            "stock": 150
+        },
+        {
+            "id": 4,
+            "name": "Book4",
+            "author": "Author 4",
+            "description": "A heartwarming romance story.",
+            "user": 2,
+            "price": 350,
+            "stock": 200
+        },
+        {
+            "id": 5,
+            "name": "Book5",
+            "author": "Author 5",
+            "description": "A collection of thought-provoking poems.",
+            "user": 3,
+            "price": 200,
+            "stock": 300
+        },
+        {
+            "id": 6,
+            "name": "Book6",
+            "author": "Author 6",
+            "description": "A beginner's guide to coding.",
+            "user": 4,
+            "price": 500,
+            "stock": 90
+        },
+        {
+            "id": 7,
+            "name": "Book7",
+            "author": "Author 7",
+            "description": "An action-packed science fiction saga.",
+            "user": 2,
+            "price": 600,
+            "stock": 75
+        },
+        {
+            "id": 8,
+            "name": "Book8",
+            "author": "Author 8",
+            "description": "A cookbook for healthy living.",
+            "user": 3,
+            "price": 150,
+            "stock": 250
+        }
+    ]
 }
