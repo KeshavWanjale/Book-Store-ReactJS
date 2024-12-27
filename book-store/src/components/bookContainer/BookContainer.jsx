@@ -1,4 +1,5 @@
 import React from 'react'
+import '../bookContainer/BookContainer.css'
 import BookCard from '../bookCard/BookCard'
 import { Grid } from "@mui/material";
 
@@ -96,78 +97,6 @@ function getBookList() {
             "user": 3,
             "price": 150,
             "stock": 250
-        },
-        {
-            "id": 9,
-            "name": "Book9",
-            "author": "Author 9",
-            "description": "A humorous take on modern life.",
-            "user": 4,
-            "price": 275,
-            "stock": 300
-        },
-        {
-            "id": 10,
-            "name": "Book10",
-            "author": "Author 10",
-            "description": "An intense legal drama.",
-            "user": 5,
-            "price": 450,
-            "stock": 100
-        },
-        {
-            "id": 11,
-            "name": "Book11",
-            "author": "Author 11",
-            "description": "A comprehensive travel guide.",
-            "user": 1,
-            "price": 300,
-            "stock": 60
-        },
-        {
-            "id": 12,
-            "name": "Book12",
-            "author": "Author 12",
-            "description": "An exploration of the universe.",
-            "user": 2,
-            "price": 700,
-            "stock": 40
-        },
-        {
-            "id": 13,
-            "name": "Book13",
-            "author": "Author 13",
-            "description": "A biography of a legendary figure.",
-            "user": 3,
-            "price": 350,
-            "stock": 220
-        },
-        {
-            "id": 14,
-            "name": "Book14",
-            "author": "Author 14",
-            "description": "A children's book full of adventures.",
-            "user": 4,
-            "price": 180,
-            "stock": 400
-        },
-        {
-            "id": 15,
-            "name": "Book15",
-            "author": "Author 15",
-            "description": "A guide to mastering photography.",
-            "user": 5,
-            "price": 550,
-            "stock": 70
-        },
-        {
-            "id": 16,
-            "name": "Book16",
-            "author": "Author 16",
-            "description": "A guide to mastering photography.",
-            "user": 5,
-            "price": 550,
-            "stock": 70
         }
     ]
 }

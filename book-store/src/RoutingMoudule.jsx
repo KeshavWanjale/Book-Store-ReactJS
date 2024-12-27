@@ -2,6 +2,7 @@ import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import BookContainer from './components/bookContainer/BookContainer';
 import Home from './components/home/Home';
+import BookDetails from './components/bookDetails/BookDetails';
 
 export default function RoutingMoudule() {
     const AppRoutes = createBrowserRouter([
@@ -12,6 +13,10 @@ export default function RoutingMoudule() {
                 {
                     path: "/books",
                     element: <BookContainer />,
+                },
+                {
+                    path: "/details",
+                    element: <BookDetails />,
                 }
             ],
         },
