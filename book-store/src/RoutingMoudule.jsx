@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import BookContainer from './components/bookContainer/BookContainer';
 import Home from './components/home/Home';
 import BookDetails from './components/bookDetails/BookDetails';
+import OrderPlaced from './components/orderPlaced/OrderPlaced';
 
 export default function RoutingMoudule() {
     const AppRoutes = createBrowserRouter([
@@ -17,6 +18,10 @@ export default function RoutingMoudule() {
                 {
                     path: "/books/:id",
                     element: <BookDetails />,
+                },
+                {
+                    path: "/order-placed",
+                    element: <OrderPlaced />,
                 }
             ],
         },
