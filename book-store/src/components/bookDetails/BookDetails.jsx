@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import "../bookDetails/BookDetail.css"
+import "../bookDetails/BookDetail.css";
 import { useParams } from "react-router-dom";
 import {
     Container,
@@ -9,25 +8,25 @@ import {
     TextField,
     Box,
     Divider,
-    Avatar
+    Avatar,
 } from "@mui/material";
 import { Rating } from "@mui/material";
-import bookImage from '../../assets/education/education.png'
-import { useSelector } from 'react-redux';
-
+import bookImage from "../../assets/education/education.png";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function BookDetails() {
     const { id } = useParams();
-    const books = useSelector((state) => state.books)
+    const dispatch = useDispatch();
 
-    const [isInBag, setIsInBag] = useState(false);
-
-    const addToBag = () => {
-        setIsInBag(true);
-    };
+    // Fetch books and cart items from the store
+    const books = useSelector((state) => state.books);
+    const cartItems = useSelector((state) => state.cart.items);
 
     // Find the book based on the `id` parameter
     const book = books.find((book) => book.id === parseInt(id));
+
+    // Check if the current book is in the cart
+    const cartItem = cartItems.find((item) => item.book === book?.id);
 
     if (!book) {
         return (
@@ -39,9 +38,34 @@ export default function BookDetails() {
         );
     }
 
+    const handleAddToCart = () => {
+        dispatch({
+            type: "cart/addItem",
+            payload: { book: book.id, price: book.price, quantity: 1 },
+        });
+    };
+
+    const handleIncreaseQuantity = () => {
+        dispatch({
+            type: "cart/updateItemQuantity",
+            payload: { book: book.id, quantity: cartItem.quantity + 1 },
+        });
+    };
+
+    const handleDecreaseQuantity = () => {
+        if (cartItem.quantity > 1) {
+            dispatch({
+                type: "cart/updateItemQuantity",
+                payload: { book: book.id, quantity: cartItem.quantity - 1 },
+            });
+        } else {
+            dispatch({ type: "cart/removeItem", payload: book.id });
+        }
+    };
+
     return (
         <Container>
-            <Grid container spacing={4} >
+            <Grid container spacing={4}>
                 <Grid item xs={12} md={4}>
                     <div
                         style={{
@@ -59,27 +83,25 @@ export default function BookDetails() {
                     </div>
                     <Grid container spacing={2} sx={{ marginTop: "20px" }}>
                         <Grid item>
-                            {!isInBag ? (
-                                <Button
-                                    variant="contained"
-                                    color="#A03037"
-                                    onClick={addToBag}
-                                >
-                                    ADD TO BAG
-                                </Button>
-                            ) : (
+                            {cartItem ? (
                                 <Box display="flex" alignItems="center" gap={2}>
-                                    <Button variant="outlined" >
+                                    <Button variant="outlined" onClick={handleDecreaseQuantity}>
                                         -
                                     </Button>
-                                    <Typography>1</Typography>
-                                    <Button variant="outlined" >
+                                    <Typography>{cartItem.quantity}</Typography>
+                                    <Button variant="outlined" onClick={handleIncreaseQuantity}>
                                         +
                                     </Button>
                                 </Box>
-                            )
-                            }
-
+                            ) : (
+                                <Button
+                                    variant="contained"
+                                    color="#A03037"
+                                    onClick={handleAddToCart}
+                                >
+                                    ADD TO BAG
+                                </Button>
+                            )}
                         </Grid>
                         <Grid item>
                             <Button variant="outlined" color="secondary">
@@ -167,7 +189,7 @@ export default function BookDetails() {
                         <div className="fourth-container">
                             <h3>Reviews</h3>
                             <div className="review-container">
-                                <div className="review-header" >
+                                <div className="review-header">
                                     <Avatar>JD</Avatar>
                                     <div className="reviewer-info">
                                         <strong>John Doe</strong>

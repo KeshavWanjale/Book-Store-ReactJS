@@ -13,8 +13,12 @@ import {
 } from "@mui/icons-material";
 import "./NavBar.css";
 import bookImage from '../../assets/education/education.png'
+import { useSelector } from 'react-redux';
+
 
 export default function NavBar() {
+    const numberOfCartItems = useSelector((state) => state.cart.items.length);
+
     return (
         <AppBar position="fixed" color="primary" className="app-bar">
             <Toolbar className="toolbar">
@@ -43,7 +47,7 @@ export default function NavBar() {
                         <Typography className="icon-label">Profile</Typography>
                     </div>
                     <div className="icon-container">
-                        <Badge badgeContent={0} color="error">
+                        <Badge badgeContent={numberOfCartItems} color="error">
                             <ShoppingCart className="icon cart-icon" />
                         </Badge>
                         <Typography className="icon-label">Cart</Typography>
