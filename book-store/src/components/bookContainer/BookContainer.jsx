@@ -24,7 +24,6 @@ const BookContainer = () => {
         <Container>
             <div
                 style={{
-                    marginTop: "5rem",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
