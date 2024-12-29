@@ -81,7 +81,7 @@ export default function CartContainer() {
                                 </Typography>
                             </div>
                             <div>
-                                <Button onClick={handleDecreaseQuantity}>-</Button>
+                                <Button >-</Button>
                                 <span>{item.quantity}</span>
                                 <Button >+</Button>
                             </div>
