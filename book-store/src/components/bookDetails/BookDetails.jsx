@@ -26,7 +26,7 @@ export default function BookDetails() {
     const book = books.find((book) => book.id === parseInt(id));
 
     // Check if the current book is in the cart
-    const cartItem = cartItems.find((item) => item.book === book?.id);
+    const cartItem = cartItems.find((item) => item.bookID === book?.id);
 
     if (!book) {
         return (
@@ -41,14 +41,14 @@ export default function BookDetails() {
     const handleAddToCart = () => {
         dispatch({
             type: "cart/addItem",
-            payload: { book: book.id, price: book.price, quantity: 1 },
+            payload: { bookID: book.id, bookName: book.name, price: book.price, quantity: 1 },
         });
     };
 
     const handleIncreaseQuantity = () => {
         dispatch({
             type: "cart/updateItemQuantity",
-            payload: { book: book.id, quantity: cartItem.quantity + 1 },
+            payload: { bookID: book.id, quantity: cartItem.quantity + 1 },
         });
     };
 
@@ -56,7 +56,7 @@ export default function BookDetails() {
         if (cartItem.quantity > 1) {
             dispatch({
                 type: "cart/updateItemQuantity",
-                payload: { book: book.id, quantity: cartItem.quantity - 1 },
+                payload: { bookID: book.id, quantity: cartItem.quantity - 1 },
             });
         } else {
             dispatch({ type: "cart/removeItem", payload: book.id });

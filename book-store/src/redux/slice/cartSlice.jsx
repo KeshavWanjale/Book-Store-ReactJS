@@ -25,21 +25,21 @@ const cartSlice = createSlice({
             );
         },
         addItem(state, action) {
-            const { book, price, quantity } = action.payload;
-            const existingItem = state.items.find((item) => item.book === book);
+            const { bookID, bookName, price, quantity } = action.payload;
+            const existingItem = state.items.find((item) => item.bookID === bookID);
 
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
-                state.items.push({ book, price, quantity });
+                state.items.push({ bookID, bookName, price, quantity });
             }
 
             state.totalQuantity += quantity;
             state.totalPrice += price * quantity;
         },
         updateItemQuantity(state, action) {
-            const { book, quantity } = action.payload;
-            const existingItem = state.items.find((item) => item.book === book);
+            const { bookID, quantity } = action.payload;
+            const existingItem = state.items.find((item) => item.bookID === bookID);
 
             if (existingItem) {
                 const previousQuantity = existingItem.quantity;
@@ -52,13 +52,13 @@ const cartSlice = createSlice({
             }
         },
         removeItem(state, action) {
-            const book = action.payload;
-            const existingItem = state.items.find((item) => item.book === book);
+            const bookID = action.payload;
+            const existingItem = state.items.find((item) => item.bookID === bookID);
 
             if (existingItem) {
                 state.totalQuantity -= existingItem.quantity;
                 state.totalPrice -= existingItem.price * existingItem.quantity;
-                state.items = state.items.filter((item) => item.book !== book);
+                state.items = state.items.filter((item) => item.bookID !== bookID);
             }
         },
     },
