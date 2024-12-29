@@ -19,7 +19,7 @@ import {
     IconButton,
 } from "@mui/material";
 import { ArrowDropDown, ArrowRight } from "@mui/icons-material";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function CartContainer() {
@@ -29,6 +29,7 @@ export default function CartContainer() {
     const cartItems = useSelector((state) => state.cart.items)
     const books = useSelector((state) => state.books)
 
+    const dispatch = useDispatch();
 
     if (cartItems.length === 0) {
         return (
@@ -39,6 +40,30 @@ export default function CartContainer() {
             </Container>
         );
     }
+
+    const handleIncreaseQuantity = (cartItem) => {
+        const book = books.find((book) => book.id === cartItem.bookID);
+        dispatch({
+            type: "cart/updateItemQuantity",
+            payload: { bookID: book.id, quantity: cartItem.quantity + 1 },
+        });
+    };
+
+    const handleDecreaseQuantity = (cartItem) => {
+        const book = books.find((book) => book.id === cartItem.bookID);
+        if (cartItem.quantity > 1) {
+            dispatch({
+                type: "cart/updateItemQuantity",
+                payload: { bookID: book.id, quantity: cartItem.quantity - 1 },
+            });
+        } else {
+            dispatch({ type: "cart/removeItem", payload: book.id });
+        }
+    };
+    const handleRemoveBook = (cartItem) => {
+        const book = books.find((book) => book.id === cartItem.bookID);
+        dispatch({ type: "cart/removeItem", payload: book.id });
+    };
 
     return (
         <div style={{ width: "80%", margin: "auto", marginBlock: "45px" }}>
@@ -81,13 +106,14 @@ export default function CartContainer() {
                                 </Typography>
                             </div>
                             <div>
-                                <Button >-</Button>
+                                <Button onClick={() => handleDecreaseQuantity(item)}>-</Button>
                                 <span>{item.quantity}</span>
-                                <Button >+</Button>
+                                <Button onClick={() => handleIncreaseQuantity(item)} >+</Button>
                             </div>
                             <Button
                                 variant="outlined"
                                 color="secondary"
+                                onClick={() => handleRemoveBook(item)}
                             >
                                 Remove
                             </Button>
