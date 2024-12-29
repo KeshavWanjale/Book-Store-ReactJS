@@ -4,6 +4,7 @@ import BookContainer from './components/bookContainer/BookContainer';
 import Home from './components/home/Home';
 import BookDetails from './components/bookDetails/BookDetails';
 import OrderPlaced from './components/orderPlaced/OrderPlaced';
+import CartContainer from './components/cartContainer/CartContainer';
 
 export default function RoutingMoudule() {
     const AppRoutes = createBrowserRouter([
@@ -22,6 +23,10 @@ export default function RoutingMoudule() {
                 {
                     path: "/order-placed",
                     element: <OrderPlaced />,
+                },
+                {
+                    path: "/cart",
+                    element: <CartContainer />,
                 }
             ],
         },

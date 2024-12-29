@@ -14,10 +14,12 @@ import {
 import "./NavBar.css";
 import bookImage from '../../assets/education/education.png'
 import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
 
 export default function NavBar() {
     const numberOfCartItems = useSelector((state) => state.cart.items.length);
+    const navigate = useNavigate();
 
     return (
         <AppBar position="fixed" color="primary" className="app-bar">
@@ -46,7 +48,7 @@ export default function NavBar() {
                         <AccountCircle className="icon profile-icon" />
                         <Typography className="icon-label">Profile</Typography>
                     </div>
-                    <div className="icon-container">
+                    <div className="icon-container" onClick={() => navigate("/cart")}>
                         <Badge badgeContent={numberOfCartItems} color="error">
                             <ShoppingCart className="icon cart-icon" />
                         </Badge>
