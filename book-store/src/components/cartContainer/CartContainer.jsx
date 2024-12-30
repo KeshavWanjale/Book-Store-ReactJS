@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function CartContainer() {
     const cartItems = useSelector((state) => state.cart.items)
-    const books = useSelector((state) => state.books)
+    const books = useSelector((state) => state.books.list)
 
     const dispatch = useDispatch();
 

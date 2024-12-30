@@ -4,7 +4,7 @@ import { Grid, Typography, Container, Pagination } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const BookContainer = () => {
-    const books = useSelector((state) => state.books);
+    const books = useSelector((state) => state.books.list);
     const [currentPage, setCurrentPage] = React.useState(1);
     const itemsPerPage = 12; // Number of books per page
 

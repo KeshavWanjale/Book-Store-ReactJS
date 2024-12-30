@@ -19,7 +19,7 @@ export default function BookDetails() {
     const dispatch = useDispatch();
 
     // Fetch books and cart items from the store
-    const books = useSelector((state) => state.books);
+    const books = useSelector((state) => state.books.list);
     const cartItems = useSelector((state) => state.cart.items);
 
     // Find the book based on the `id` parameter
