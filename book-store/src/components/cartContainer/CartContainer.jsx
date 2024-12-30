@@ -18,14 +18,10 @@ import {
     Paper,
     IconButton,
 } from "@mui/material";
-import { ArrowDropDown, ArrowRight } from "@mui/icons-material";
 import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function CartContainer() {
-    const [isAddressOpen, setIsAddressOpen] = useState(false);
-    const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
-
     const cartItems = useSelector((state) => state.cart.items)
     const books = useSelector((state) => state.books)
 
@@ -122,7 +118,6 @@ export default function CartContainer() {
 
                 })}
 
-
                 <Box display="flex" justifyContent="flex-end">
                     <Button
                         variant="contained"
@@ -134,28 +129,36 @@ export default function CartContainer() {
             </div>
 
             {/* ADDRESS SECTION */}
-            <Box sx={{ marginBottom: "10px" }}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    <IconButton onClick={() => setIsAddressOpen(!isAddressOpen)}>
-                        {isAddressOpen ? <ArrowDropDown /> : <ArrowRight />}
-                    </IconButton>
-                    <Typography variant="h6">Select Address</Typography>
-                </div>
-            </Box>
+            <div
+                style={{
+                    border: "1px solid black",
+                    padding: "20px",
+                    borderRadius: "8px",
+                    marginBottom: "20px",
+                }}
+            >
+                <Box sx={{ marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="h6">Address Details</Typography>
+                    </div>
+                </Box>
+            </div>
 
             {/* Order summary SECTION */}
-            <Box sx={{ marginBottom: "10px" }}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    <IconButton
-                        onClick={() => setIsOrderSummaryOpen(!isOrderSummaryOpen)}
-                    >
-                        {isOrderSummaryOpen ? <ArrowDropDown /> : <ArrowRight />}
-                    </IconButton>
-                    <Typography variant="h6">Order Summary</Typography>
-                </div>
-            </Box>
-
-
+            <div
+                style={{
+                    border: "1px solid black",
+                    padding: "20px",
+                    borderRadius: "8px",
+                    marginBottom: "20px",
+                }}
+            >
+                <Box sx={{ marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="h6">Order Summary</Typography>
+                    </div>
+                </Box>
+            </div>
 
         </div>
     )
