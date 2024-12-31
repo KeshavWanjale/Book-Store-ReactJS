@@ -16,16 +16,27 @@ import {
     TableHead,
     TableRow,
     Paper,
-    IconButton,
 } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
+import { addAddress } from '../../redux/slice/addressSlice';
 
 
 export default function CartContainer() {
     const cartItems = useSelector((state) => state.cart.items)
     const books = useSelector((state) => state.books.list)
+    const [existingAddress, setExistingAddress] = useState("");
+    const addresses = useSelector((state) => state.address.addresses);
+    const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
+    const [address, setAddress] = useState({
+        fullName: "",
+        phone: "",
+        addressLine: "",
+        city: "",
+        state: "",
+    });
 
     const dispatch = useDispatch();
+    const isPlaceOrder = true;
 
     if (cartItems.length === 0) {
         return (
@@ -60,6 +71,37 @@ export default function CartContainer() {
         const book = books.find((book) => book.id === cartItem.bookID);
         dispatch({ type: "cart/removeItem", payload: book.id });
     };
+
+    const handleAddAddress = () => {
+        if (
+            address.fullName &&
+            address.phone &&
+            address.addressLine &&
+            address.city &&
+            address.state
+        ) {
+            dispatch(addAddress(address));
+            setAddress({
+                fullName: "",
+                phone: "",
+                addressLine: "",
+                city: "",
+                state: "",
+            });
+            alert("Address added successfully!");
+        } else {
+            alert("Please fill in all address fields.");
+        }
+    };
+
+    const handleContinue = () => {
+        if (existingAddress || (address.fullName && address.phone)) {
+            setIsOrderSummaryOpen(true);
+        } else {
+            alert("Please select or enter an address.");
+        }
+    };
+
 
     return (
         <div style={{ width: "80%", margin: "auto", marginBlock: "45px" }}>
@@ -117,16 +159,21 @@ export default function CartContainer() {
                     );
 
                 })}
+                {!isPlaceOrder ? (
+                    <Box display="flex" justifyContent="flex-end">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                        >
+                            Place Order
+                        </Button>
+                    </Box>
+                ) : (
+                    <></>
+                )}
 
-                <Box display="flex" justifyContent="flex-end">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                    >
-                        Place Order
-                    </Button>
-                </Box>
             </div>
+
 
             {/* ADDRESS SECTION */}
             <div
@@ -142,7 +189,97 @@ export default function CartContainer() {
                         <Typography variant="h6">Address Details</Typography>
                     </div>
                 </Box>
+
+                <Collapse in={isPlaceOrder}>
+                    <Box sx={{ border: "0.5px solid black", padding: "20px" }}>
+                        <RadioGroup
+                            value={existingAddress}
+                            onChange={(e) => setExistingAddress(e.target.value)}
+                        >
+                            {addresses.map((addr, index) => (
+                                <FormControlLabel
+                                    key={index}
+                                    value={addr.fullName}
+                                    control={<Radio />}
+                                    label={`${addr.fullName} - ${addr.phone}, ${addr.addressLine}, ${addr.city}, ${addr.state}`}
+                                />
+                            ))}
+                        </RadioGroup>
+                        <Typography variant="subtitle1" marginY={1}>
+                            Add New Address
+                        </Typography>
+                        <TextField
+                            label="Full Name"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={address.fullName}
+                            onChange={(e) =>
+                                setAddress({ ...address, fullName: e.target.value })
+                            }
+                        />
+                        <TextField
+                            label="Mobile Number"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            type="number"
+                            value={address.phone}
+                            onChange={(e) =>
+                                setAddress({ ...address, phone: e.target.value })
+                            }
+                        />
+                        <TextField
+                            label="Address"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            multiline
+                            rows={3}
+                            value={address.addressLine}
+                            onChange={(e) =>
+                                setAddress({ ...address, addressLine: e.target.value })
+                            }
+                        />
+                        <TextField
+                            label="City/Town"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={address.city}
+                            onChange={(e) => setAddress({ ...address, city: e.target.value })}
+                        />
+                        <TextField
+                            label="State"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={address.state}
+                            onChange={(e) =>
+                                setAddress({ ...address, state: e.target.value })
+                            }
+                        />
+                        <Box display="flex" justifyContent="flex-end" marginTop="10px">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleAddAddress}
+                            >
+                                Add Address
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleContinue}
+                                style={{ marginLeft: "10px" }}
+                            >
+                                Continue
+                            </Button>
+                        </Box>
+                    </Box>
+                </Collapse>
             </div>
+
 
             {/* Order summary SECTION */}
             <div
@@ -158,6 +295,57 @@ export default function CartContainer() {
                         <Typography variant="h6">Order Summary</Typography>
                     </div>
                 </Box>
+                <Collapse in={isOrderSummaryOpen}>
+                    <Box sx={{ border: "0.5px solid black", padding: "20px" }}>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Item</TableCell>
+                                        <TableCell align="right">Quantity</TableCell>
+                                        <TableCell align="right">Price</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {cartItems.map((item) => {
+                                        const book = books.find((book) => book.id === item.bookID);
+                                        return (
+                                            <TableRow key={item.bookID}>
+                                                <TableCell>{book?.name}</TableCell>
+                                                <TableCell align="right">{item.quantity}</TableCell>
+                                                <TableCell align="right">
+                                                    Rs. {book?.price * item.quantity}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                    <TableRow>
+                                        <TableCell colSpan={2} align="right">
+                                            <strong>Total:</strong>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <strong>
+                                                Rs.{" "}
+                                                {cartItems.reduce((total, item) => {
+                                                    const book = books.find((book) => book.id === item.bookID);
+                                                    return total + (book?.price * item.quantity || 0);
+                                                }, 0)}
+                                            </strong>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <Box display="flex" justifyContent="flex-end" marginTop="10px">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                            >
+                                Checkout
+                            </Button>
+                        </Box>
+                    </Box>
+                </Collapse>
             </div>
 
         </div>
