@@ -16,17 +16,24 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Modal,
 } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { addAddress } from '../../redux/slice/addressSlice';
+import LoginModal from '../loginModal/LoginModal';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CartContainer() {
     const cartItems = useSelector((state) => state.cart.items)
     const books = useSelector((state) => state.books.list)
+    const [isPlaceOrder, setIsPlaceOrder] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [existingAddress, setExistingAddress] = useState("");
     const addresses = useSelector((state) => state.address.addresses);
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
+    const navigate = useNavigate();
+
     const [address, setAddress] = useState({
         fullName: "",
         phone: "",
@@ -36,7 +43,7 @@ export default function CartContainer() {
     });
 
     const dispatch = useDispatch();
-    const isPlaceOrder = true;
+
 
     if (cartItems.length === 0) {
         return (
@@ -67,9 +74,19 @@ export default function CartContainer() {
             dispatch({ type: "cart/removeItem", payload: book.id });
         }
     };
+
     const handleRemoveBook = (cartItem) => {
         const book = books.find((book) => book.id === cartItem.bookID);
         dispatch({ type: "cart/removeItem", payload: book.id });
+    };
+
+    const handlePlaceOrder = () => {
+        const user = localStorage.getItem("accessToken")
+        user ? setIsPlaceOrder(!isPlaceOrder) : setIsModalOpen(true);
+    }
+
+    const handleLoginModalClose = () => {
+        setIsModalOpen(false);
     };
 
     const handleAddAddress = () => {
@@ -164,6 +181,7 @@ export default function CartContainer() {
                         <Button
                             variant="contained"
                             color="primary"
+                            onClick={handlePlaceOrder}
                         >
                             Place Order
                         </Button>
@@ -340,6 +358,7 @@ export default function CartContainer() {
                             <Button
                                 variant="contained"
                                 color="primary"
+                                onClick={() => navigate('/order-placed')}
                             >
                                 Checkout
                             </Button>
@@ -348,6 +367,14 @@ export default function CartContainer() {
                 </Collapse>
             </div>
 
+            <Modal
+                open={isModalOpen}
+                onClose={handleLoginModalClose}
+                aria-labelledby="login-modal-title"
+                aria-describedby="login-modal-description"
+            >
+                <LoginModal onSuccess={handleLoginModalClose} />
+            </Modal>
         </div>
     )
 }

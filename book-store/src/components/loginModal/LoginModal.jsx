@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "../loginModal/LoginModal.css";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
 import logo from "../../assets/images/logo.png";
 import { LoginApiCall } from '../../utils/Apis';
 
@@ -15,7 +15,7 @@ const modalStyle = {
     borderRadius: "8px",
 };
 
-export default function LoginModal({ open, onClose }) {
+export default function LoginModal({ onSuccess }) {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,7 +29,7 @@ export default function LoginModal({ open, onClose }) {
             .then((response) => {
                 console.log('Login successful:', response);
                 alert('Login successful');
-                onClose();
+                onSuccess()
             })
             .catch((err) => {
                 console.error('Login error:', err);
@@ -38,91 +38,84 @@ export default function LoginModal({ open, onClose }) {
     };
 
     return (
-        <Modal
-            open={open}
-            onClose={onClose}
-            aria-labelledby="login-modal-title"
-            aria-describedby="login-modal-description"
-        >
-            <Box sx={modalStyle}>
-                <div className="login-container">
-                    <div className="logo-container">
-                        <img src={logo} alt="Logo" />
-                        <h3 style={{ marginTop: "10px" }}>ONLINE BOOK SHOPPING</h3>
+        <Box sx={modalStyle}>
+            <div className="login-container">
+                <div className="logo-container">
+                    <img src={logo} alt="Logo" />
+                    <h3 style={{ marginTop: "10px" }}>ONLINE BOOK SHOPPING</h3>
+                </div>
+                <div className="form-container">
+                    <div className="form-header">
+                        <h2
+                            style={{
+                                color: isLogin ? "maroon" : "gray",
+                                cursor: "pointer",
+                            }}
+                            onClick={toggleForm}
+                        >
+                            LOGIN
+                        </h2>
+                        <h2
+                            style={{
+                                color: isLogin ? "gray" : "maroon",
+                                cursor: "pointer",
+                            }}
+                            onClick={toggleForm}
+                        >
+                            SIGNUP
+                        </h2>
                     </div>
-                    <div className="form-container">
-                        <div className="form-header">
-                            <h2
-                                style={{
-                                    color: isLogin ? "maroon" : "gray",
-                                    cursor: "pointer",
-                                }}
-                                onClick={toggleForm}
-                            >
-                                LOGIN
-                            </h2>
-                            <h2
-                                style={{
-                                    color: isLogin ? "gray" : "maroon",
-                                    cursor: "pointer",
-                                }}
-                                onClick={toggleForm}
-                            >
-                                SIGNUP
-                            </h2>
-                        </div>
-                        <div className="login-form-body">
-                            {isLogin ? (
-                                <>
-                                    <label>Email Id</label>
-                                    <TextField
-                                        size="small"
-                                        fullWidth
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                    <label>Password</label>
-                                    <TextField
-                                        size="small"
-                                        type="password"
-                                        fullWidth
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                    <label
-                                        style={{
-                                            color: "gray",
-                                            cursor: "pointer",
-                                            marginTop: "10px",
-                                        }}
-                                    >
-                                        Forgot Password?
-                                    </label>
-                                    <Button
-                                        variant="contained"
-                                        style={{ marginTop: "20px" }}
-                                        onClick={handleLogin}
-                                    >
-                                        Login
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <label>Name</label>
-                                    <TextField size="small" fullWidth />
-                                    <label>Email Id</label>
-                                    <TextField size="small" fullWidth />
-                                    <label>Password</label>
-                                    <TextField size="small" type="password" fullWidth />
-                                    <Button variant="contained" style={{ marginTop: "20px" }}>
-                                        Signup
-                                    </Button>
-                                </>
-                            )}
-                        </div>
+                    <div className="login-form-body">
+                        {isLogin ? (
+                            <>
+                                <label>Email Id</label>
+                                <TextField
+                                    size="small"
+                                    fullWidth
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <label>Password</label>
+                                <TextField
+                                    size="small"
+                                    type="password"
+                                    fullWidth
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <label
+                                    style={{
+                                        color: "gray",
+                                        cursor: "pointer",
+                                        marginTop: "10px",
+                                    }}
+                                >
+                                    Forgot Password?
+                                </label>
+                                <Button
+                                    variant="contained"
+                                    style={{ marginTop: "20px" }}
+                                    onClick={handleLogin}
+                                >
+                                    Login
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <label>Name</label>
+                                <TextField size="small" fullWidth />
+                                <label>Email Id</label>
+                                <TextField size="small" fullWidth />
+                                <label>Password</label>
+                                <TextField size="small" type="password" fullWidth />
+                                <Button variant="contained" style={{ marginTop: "20px" }}>
+                                    Signup
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </div>
-            </Box>
-        </Modal>
+            </div>
+        </Box>
     );
 }

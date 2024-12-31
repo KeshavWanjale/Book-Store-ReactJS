@@ -9,6 +9,7 @@ import {
     Menu,
     MenuItem,
     Tooltip,
+    Modal
 } from "@mui/material";
 import {
     Search as SearchIcon,
@@ -101,7 +102,9 @@ export default function NavBar() {
                                 ]
                             ) : (
                                 [
-                                    <MenuItem key="login-signup" onClick={handleLoginModalOpen}>Login/Signup</MenuItem>,
+                                    <MenuItem key="login-signup" onClick={handleLoginModalOpen}>
+                                        Login/Signup
+                                    </MenuItem>,
                                     <Tooltip title="My Orders" arrow key="my-orders">
                                         <MenuItem>
                                             <OrdersIcon style={{ marginRight: 8 }} />
@@ -128,7 +131,14 @@ export default function NavBar() {
                     </div>
                 </div>
             </Toolbar>
-            <LoginModal open={isModalOpen} onClose={handleLoginModalClose} />
+            <Modal
+                open={isModalOpen}
+                onClose={handleLoginModalClose}
+                aria-labelledby="login-modal-title"
+                aria-describedby="login-modal-description"
+            >
+                <LoginModal onSuccess={handleLoginModalClose} />
+            </Modal>
         </AppBar>
     )
 }
