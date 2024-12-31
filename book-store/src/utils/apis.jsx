@@ -5,7 +5,7 @@ const BASE_URL = 'http://127.0.0.1:8000/api';
 
 // USER API CALLS
 export const RegisterApiCall = (userData) => {
-    return axios.post(`${BASE_URL}/user/register`, userData)
+    return axios.post(`${BASE_URL}/users/register`, userData)
         .then((response) => response.data)
         .catch((error) => {
             throw error.response ? error.response.data : error;
@@ -13,7 +13,7 @@ export const RegisterApiCall = (userData) => {
 };
 
 export const LoginApiCall = (loginData) => {
-    return axios.post(`${BASE_URL}/user/login`, loginData)
+    return axios.post(`${BASE_URL}/users/login`, loginData)
         .then((response) => {
             const { data } = response;
             if (data.status === "success") {

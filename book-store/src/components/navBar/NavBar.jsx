@@ -1,25 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     AppBar,
     Toolbar,
     Typography,
+    IconButton,
     InputBase,
     Badge,
+    Menu,
+    MenuItem,
+    Tooltip,
 } from "@mui/material";
 import {
     Search as SearchIcon,
     AccountCircle,
     ShoppingCart,
+    Assignment as OrdersIcon,
+    Favorite as WishlistIcon,
 } from "@mui/icons-material";
 import "./NavBar.css";
 import bookImage from '../../assets/education/education.png'
 import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
+import LoginModal from '../loginModal/LoginModal';
 
 
 export default function NavBar() {
     const numberOfCartItems = useSelector((state) => state.cart.items.length);
     const navigate = useNavigate();
+
+
+    const user = localStorage.getItem("accessToken")
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLoginModalOpen = () => {
+        setIsModalOpen(true);
+        handleMenuClose();
+    };
+    const handleLoginModalClose = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <AppBar position="fixed" color="primary" className="app-bar">
@@ -45,9 +75,51 @@ export default function NavBar() {
 
                 <div className="icons-section">
                     <div className="icon-container">
-                        <AccountCircle className="icon profile-icon" />
+                        <IconButton
+                            color="inherit"
+                            onClick={handleProfileMenuOpen}
+                        >
+                            <AccountCircle />
+                        </IconButton>
                         <Typography className="icon-label">Profile</Typography>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={isMenuOpen}
+                            onClose={handleMenuClose}
+                            MenuListProps={{
+                                "aria-labelledby": "profile-button",
+                            }}
+                        >
+                            {user ? (
+                                [
+                                    <MenuItem key="hello-user">Hello User</MenuItem>,
+                                    <MenuItem key="profile">Profile</MenuItem>,
+                                    <MenuItem key="logout" onClick={() => {
+                                        localStorage.clear();
+                                        setAnchorEl(null)
+                                    }}>Logout</MenuItem>,
+                                ]
+                            ) : (
+                                [
+                                    <MenuItem key="login-signup" onClick={handleLoginModalOpen}>Login/Signup</MenuItem>,
+                                    <Tooltip title="My Orders" arrow key="my-orders">
+                                        <MenuItem>
+                                            <OrdersIcon style={{ marginRight: 8 }} />
+                                            My Orders
+                                        </MenuItem>
+                                    </Tooltip>,
+                                    <Tooltip title="My Wishlist" arrow key="my-wishlist">
+                                        <MenuItem>
+                                            <WishlistIcon style={{ marginRight: 8 }} />
+                                            My Wishlist
+                                        </MenuItem>
+                                    </Tooltip>,
+                                ]
+                            )}
+                        </Menu>
                     </div>
+
+
                     <div className="icon-container" onClick={() => navigate("/cart")}>
                         <Badge badgeContent={numberOfCartItems} color="error">
                             <ShoppingCart className="icon cart-icon" />
@@ -56,6 +128,7 @@ export default function NavBar() {
                     </div>
                 </div>
             </Toolbar>
+            <LoginModal open={isModalOpen} onClose={handleLoginModalClose} />
         </AppBar>
     )
 }

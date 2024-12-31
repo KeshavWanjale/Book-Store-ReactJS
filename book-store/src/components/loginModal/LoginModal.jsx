@@ -1,26 +1,46 @@
-import React, { useState } from 'react'
-import "../loginModal/LoginModal.css"
+import React, { useState } from 'react';
+import "../loginModal/LoginModal.css";
 import { Modal, Box, TextField, Button } from "@mui/material";
-import logo from "../../assets/images/logo.png"
-
+import logo from "../../assets/images/logo.png";
+import { LoginApiCall } from '../../utils/Apis';
 
 const modalStyle = {
     position: "absolute",
     top: "50%",
     left: "35%",
     transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+    borderRadius: "8px",
 };
 
-
-export default function LoginModal() {
+export default function LoginModal({ open, onClose }) {
     const [isLogin, setIsLogin] = useState(true);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const toggleForm = () => {
         setIsLogin((prev) => !prev);
     };
 
+    const handleLogin = () => {
+        LoginApiCall({ email, password })
+            .then((response) => {
+                console.log('Login successful:', response);
+                alert('Login successful');
+                onClose();
+            })
+            .catch((err) => {
+                console.error('Login error:', err);
+                alert('Login failed, please try again.');
+            });
+    };
+
     return (
         <Modal
-            open={true}
+            open={open}
+            onClose={onClose}
             aria-labelledby="login-modal-title"
             aria-describedby="login-modal-description"
         >
@@ -58,12 +78,16 @@ export default function LoginModal() {
                                     <TextField
                                         size="small"
                                         fullWidth
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                     <label>Password</label>
                                     <TextField
                                         size="small"
                                         type="password"
                                         fullWidth
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                     <label
                                         style={{
@@ -77,6 +101,7 @@ export default function LoginModal() {
                                     <Button
                                         variant="contained"
                                         style={{ marginTop: "20px" }}
+                                        onClick={handleLogin}
                                     >
                                         Login
                                     </Button>
@@ -99,5 +124,5 @@ export default function LoginModal() {
                 </div>
             </Box>
         </Modal>
-    )
+    );
 }
