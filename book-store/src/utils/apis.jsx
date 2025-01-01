@@ -53,3 +53,54 @@ export const getBookByID = async (BookId) => {
         throw error;
     }
 };
+
+
+// Cart API CALLS
+// fetch cart for user
+export const getCartApi = async () => {
+    try {
+        const token = localStorage.getItem("accessToken")
+        if (token) {
+            const response = await axios.get(`${BASE_URL}/carts/`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+            console.log(response);
+            return response
+        } else {
+            console.error("User is not logged in");
+            throw new Error("User is not logged in");
+        }
+    } catch (error) {
+        console.error("Error Getting Cart For User:", error);
+        throw error;
+    }
+}
+
+// add books to the cart
+export const addBooksToCartApi = async (bookData) => {
+    try {
+        const token = localStorage.getItem("accessToken")
+        if (token) {
+            const response = await axios.post(`${BASE_URL}/carts/`,
+                bookData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+            console.log(response);
+            return response
+        } else {
+            console.error("User is not logged in");
+            throw new Error("User is not logged in");
+        }
+    } catch (error) {
+        console.error("Error Getting Cart For User:", error);
+        throw error;
+    }
+}
