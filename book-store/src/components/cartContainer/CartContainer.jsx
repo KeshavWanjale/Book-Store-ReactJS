@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Button,
     Typography,
@@ -23,7 +23,8 @@ import { addAddress } from '../../redux/slice/addressSlice';
 import LoginModal from '../loginModal/LoginModal';
 import { useNavigate } from 'react-router-dom';
 import { syncCart } from '../../redux/slice/syncCart';
-import { removeBooksFromCartApi, updateBooksFromCartApi } from '../../utils/apis';
+import { placeOrderApi, removeBooksFromCartApi, updateBooksFromCartApi } from '../../utils/apis';
+import { emptyCart } from '../../redux/slice/cartSlice';
 
 
 export default function CartContainer() {
@@ -144,6 +145,12 @@ export default function CartContainer() {
             alert("Please select or enter an address.");
         }
     };
+
+    const handleChekout = () => {
+        placeOrderApi();
+        dispatch(emptyCart())
+        navigate('/order-placed');
+    }
 
 
     return (
@@ -384,7 +391,7 @@ export default function CartContainer() {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={() => navigate('/order-placed')}
+                                onClick={handleChekout}
                             >
                                 Checkout
                             </Button>

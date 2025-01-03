@@ -105,7 +105,6 @@ export const addBooksToCartApi = async (bookData) => {
     }
 }
 
-
 export const removeBooksFromCartApi = async (bookId) => {
     try {
         const token = localStorage.getItem("accessToken")
@@ -149,6 +148,31 @@ export const updateBooksFromCartApi = async ({ bookId, bookQuantity }) => {
         }
     } catch (error) {
         console.error("Error removing items from Cart:", error);
+        throw error;
+    }
+}
+
+// Place Order API Call
+export const placeOrderApi = async () => {
+    try {
+        const token = localStorage.getItem("accessToken")
+        if (token) {
+            const response = await axios.post(`${BASE_URL}/carts/orders`,
+                {},
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+            console.log(response);
+            return response
+        } else {
+            console.error("User is not logged in");
+            throw new Error("User is not logged in");
+        }
+    } catch (error) {
+        console.error("Error placing order For User:", error);
         throw error;
     }
 }
