@@ -35,7 +35,6 @@ export const getAllBooksApiCall = async () => {
             "Content-Type": "application/json",
         },
     });
-    console.log("book response:", response.data);
     return response.data;
 };
 
@@ -46,7 +45,6 @@ export const getBookByID = async (BookId) => {
                 "Content-Type": "application/json",
             },
         });
-        console.log("Get Book By ID:", response.data);
         return response;
     } catch (error) {
         console.error("Error Getting Book By ID:", error);
@@ -68,7 +66,6 @@ export const getCartApi = async () => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-            console.log(response);
             return response
         } else {
             console.error("User is not logged in");
@@ -93,7 +90,6 @@ export const addBooksToCartApi = async (bookData) => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-            console.log(response);
             return response
         } else {
             console.error("User is not logged in");
@@ -116,7 +112,6 @@ export const removeBooksFromCartApi = async (bookId) => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-            console.log(response);
             return response
         } else {
             console.error("User is not logged in");
@@ -140,7 +135,6 @@ export const updateBooksFromCartApi = async ({ bookId, bookQuantity }) => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-            console.log(response);
             return response
         } else {
             console.error("User is not logged in");
@@ -165,7 +159,6 @@ export const placeOrderApi = async () => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-            console.log(response);
             return response
         } else {
             console.error("User is not logged in");
@@ -173,6 +166,29 @@ export const placeOrderApi = async () => {
         }
     } catch (error) {
         console.error("Error placing order For User:", error);
+        throw error;
+    }
+}
+
+// Get Order API Call
+export const getOrderApi = async () => {
+    try {
+        const token = localStorage.getItem("accessToken")
+        if (token) {
+            const response = await axios.get(`${BASE_URL}/carts/orders`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+            return response
+        } else {
+            console.error("User is not logged in");
+            throw new Error("User is not logged in");
+        }
+    } catch (error) {
+        console.error("Error getting orders For User:", error);
         throw error;
     }
 }

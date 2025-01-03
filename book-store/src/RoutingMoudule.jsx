@@ -6,6 +6,7 @@ import BookDetails from './components/bookDetails/BookDetails';
 import OrderPlaced from './components/orderPlaced/OrderPlaced';
 import CartContainer from './components/cartContainer/CartContainer';
 import LoginModal from './components/loginModal/LoginModal';
+import OrderList from './components/orderList/OrderList';
 
 export default function RoutingMoudule() {
     const AppRoutes = createBrowserRouter([
@@ -32,6 +33,10 @@ export default function RoutingMoudule() {
                 {
                     path: "/login",
                     element: <LoginModal />,
+                },
+                {
+                    path: "/order-list",
+                    element: <OrderList />,
                 }
             ],
         },
