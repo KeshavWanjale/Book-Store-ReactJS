@@ -75,30 +75,5 @@ export default function OrderList() {
 
             </div>
         </div>
-
-
-        // <div>
-        //     <h2>Order List</h2>
-        //     <table>
-        //         <thead>
-        //             <tr>
-        //                 <th>Book Name</th>
-        //                 <th>Author</th>
-        //                 <th>Price</th>
-        //                 <th>Quantity</th>
-        //             </tr>
-        //         </thead>
-        //         <tbody>
-        //             {books.map((book, index) => (
-        //                 <tr key={index}>
-        //                     <td>{book.name}</td>
-        //                     <td>{book.author}</td>
-        //                     <td>{book.price}</td>
-        //                     <td>{book.quantity}</td>
-        //                 </tr>
-        //             ))}
-        //         </tbody>
-        //     </table>
-        // </div>
     )
 }

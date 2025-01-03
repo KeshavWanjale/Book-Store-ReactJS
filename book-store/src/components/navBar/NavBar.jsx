@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import LoginModal from '../loginModal/LoginModal';
 import { emptyCart } from '../../redux/slice/cartSlice';
+import Button from '@mui/material/Button';
 
 
 export default function NavBar() {
@@ -57,6 +58,10 @@ export default function NavBar() {
         localStorage.clear();
         dispatch(emptyCart())
         setAnchorEl(null)
+    }
+
+    const handleMyOrders = () => {
+        navigate("/order-list")
     }
 
     return (
@@ -101,8 +106,22 @@ export default function NavBar() {
                             {user ? (
                                 [
                                     <MenuItem key="hello-user">Hello User</MenuItem>,
-                                    <MenuItem key="profile">Profile</MenuItem>,
-                                    <MenuItem key="logout" onClick={handleOnLogout}>Logout</MenuItem>,
+                                    <MenuItem key="profile">
+                                        <AccountCircle />
+                                        Profile
+                                    </MenuItem>,
+                                    <MenuItem onClick={handleMyOrders}>
+                                        <OrdersIcon style={{ marginRight: 8 }} />
+                                        My Orders
+                                    </MenuItem>,
+                                    <MenuItem>
+                                        <WishlistIcon style={{ marginRight: 8 }} />
+                                        My Wishlist
+                                    </MenuItem>,
+                                    <MenuItem key="logout" onClick={handleOnLogout}>
+                                        <Button variant="outlined">Logout</Button>
+                                    </MenuItem>,
+
                                 ]
                             ) : (
                                 [
