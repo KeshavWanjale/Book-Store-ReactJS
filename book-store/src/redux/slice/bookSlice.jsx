@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllBooksApiCall } from "../../utils/Apis";
+import { getAllBooksApiCall } from "../../utils/apis";
 
 // Async thunk for fetching books
 export const fetchBooks = createAsyncThunk("books/fetchBooks", async () => {
@@ -10,9 +10,9 @@ export const fetchBooks = createAsyncThunk("books/fetchBooks", async () => {
 const bookSlice = createSlice({
     name: "books",
     initialState: {
-        list: [], // Initial state is an empty list
-        status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
-        error: null,   // To track errors
+        list: [],
+        status: "idle",
+        error: null,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -22,7 +22,7 @@ const bookSlice = createSlice({
             })
             .addCase(fetchBooks.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.list = action.payload; // Populate the state with the fetched books
+                state.list = action.payload;
             })
             .addCase(fetchBooks.rejected, (state, action) => {
                 state.status = "failed";

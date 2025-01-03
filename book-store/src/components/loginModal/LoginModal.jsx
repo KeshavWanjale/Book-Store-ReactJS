@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import "../loginModal/LoginModal.css";
 import { Box, TextField, Button } from "@mui/material";
 import logo from "../../assets/images/logo.png";
-import { LoginApiCall } from '../../utils/Apis';
+import { LoginApiCall } from '../../utils/apis';
+import { syncCart } from '../../redux/slice/syncCart';
+import { useDispatch } from 'react-redux';
 
 const modalStyle = {
     position: "absolute",
@@ -20,6 +22,8 @@ export default function LoginModal({ onSuccess }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const dispatch = useDispatch()
+
     const toggleForm = () => {
         setIsLogin((prev) => !prev);
     };
@@ -29,6 +33,7 @@ export default function LoginModal({ onSuccess }) {
             .then((response) => {
                 console.log('Login successful:', response);
                 alert('Login successful');
+                dispatch(syncCart())
                 onSuccess()
             })
             .catch((err) => {

@@ -20,15 +20,16 @@ import {
 } from "@mui/icons-material";
 import "./NavBar.css";
 import bookImage from '../../assets/education/education.png'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import LoginModal from '../loginModal/LoginModal';
+import { emptyCart } from '../../redux/slice/cartSlice';
 
 
 export default function NavBar() {
     const numberOfCartItems = useSelector((state) => state.cart.items.length);
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
 
     const user = localStorage.getItem("accessToken")
 
@@ -51,6 +52,12 @@ export default function NavBar() {
     const handleLoginModalClose = () => {
         setIsModalOpen(false);
     };
+
+    const handleOnLogout = () => {
+        localStorage.clear();
+        dispatch(emptyCart())
+        setAnchorEl(null)
+    }
 
     return (
         <AppBar position="fixed" color="primary" className="app-bar">
@@ -95,10 +102,7 @@ export default function NavBar() {
                                 [
                                     <MenuItem key="hello-user">Hello User</MenuItem>,
                                     <MenuItem key="profile">Profile</MenuItem>,
-                                    <MenuItem key="logout" onClick={() => {
-                                        localStorage.clear();
-                                        setAnchorEl(null)
-                                    }}>Logout</MenuItem>,
+                                    <MenuItem key="logout" onClick={handleOnLogout}>Logout</MenuItem>,
                                 ]
                             ) : (
                                 [

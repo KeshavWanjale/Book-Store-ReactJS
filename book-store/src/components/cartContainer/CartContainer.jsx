@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Button,
     Typography,
@@ -22,6 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAddress } from '../../redux/slice/addressSlice';
 import LoginModal from '../loginModal/LoginModal';
 import { useNavigate } from 'react-router-dom';
+import { syncCart } from '../../redux/slice/syncCart';
+import { removeBooksFromCartApi, updateBooksFromCartApi } from '../../utils/apis';
 
 
 export default function CartContainer() {
@@ -33,6 +35,9 @@ export default function CartContainer() {
     const addresses = useSelector((state) => state.address.addresses);
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const user = localStorage.getItem("accessToken");
 
     const [address, setAddress] = useState({
         fullName: "",
@@ -41,8 +46,6 @@ export default function CartContainer() {
         city: "",
         state: "",
     });
-
-    const dispatch = useDispatch();
 
 
     if (cartItems.length === 0) {
@@ -61,6 +64,12 @@ export default function CartContainer() {
             type: "cart/updateItemQuantity",
             payload: { bookID: book.id, quantity: cartItem.quantity + 1 },
         });
+        if (user) {
+            updateBooksFromCartApi({
+                bookId: book.id,
+                bookQuantity: cartItem.quantity + 1
+            })
+        }
     };
 
     const handleDecreaseQuantity = (cartItem) => {
@@ -70,19 +79,36 @@ export default function CartContainer() {
                 type: "cart/updateItemQuantity",
                 payload: { bookID: book.id, quantity: cartItem.quantity - 1 },
             });
+            if (user) {
+                updateBooksFromCartApi({
+                    bookId: book.id,
+                    bookQuantity: cartItem.quantity - 1
+                })
+            }
         } else {
             dispatch({ type: "cart/removeItem", payload: book.id });
+            if (user) {
+                removeBooksFromCartApi(book.id)
+            }
         }
     };
 
     const handleRemoveBook = (cartItem) => {
         const book = books.find((book) => book.id === cartItem.bookID);
         dispatch({ type: "cart/removeItem", payload: book.id });
+        if (user) {
+            removeBooksFromCartApi(book.id)
+        }
     };
 
     const handlePlaceOrder = () => {
         const user = localStorage.getItem("accessToken")
-        user ? setIsPlaceOrder(!isPlaceOrder) : setIsModalOpen(true);
+        if (user) {
+            dispatch(syncCart());
+            setIsPlaceOrder(true);
+        } else {
+            setIsModalOpen(true);
+        }
     }
 
     const handleLoginModalClose = () => {

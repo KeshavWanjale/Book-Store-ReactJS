@@ -104,3 +104,51 @@ export const addBooksToCartApi = async (bookData) => {
         throw error;
     }
 }
+
+
+export const removeBooksFromCartApi = async (bookId) => {
+    try {
+        const token = localStorage.getItem("accessToken")
+        if (token) {
+            const response = await axios.delete(`${BASE_URL}/carts/${bookId}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+            console.log(response);
+            return response
+        } else {
+            console.error("User is not logged in");
+            throw new Error("User is not logged in");
+        }
+    } catch (error) {
+        console.error("Error removing items from Cart:", error);
+        throw error;
+    }
+}
+
+export const updateBooksFromCartApi = async ({ bookId, bookQuantity }) => {
+    try {
+        const token = localStorage.getItem("accessToken")
+        if (token) {
+            const response = await axios.put(`${BASE_URL}/carts/${bookId}`,
+                { new_quantity: bookQuantity },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+            console.log(response);
+            return response
+        } else {
+            console.error("User is not logged in");
+            throw new Error("User is not logged in");
+        }
+    } catch (error) {
+        console.error("Error removing items from Cart:", error);
+        throw error;
+    }
+}

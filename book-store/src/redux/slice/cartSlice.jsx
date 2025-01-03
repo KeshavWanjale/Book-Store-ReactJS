@@ -60,10 +60,14 @@ const cartSlice = createSlice({
                 state.totalPrice -= existingItem.price * existingItem.quantity;
                 state.items = state.items.filter((item) => item.bookID !== bookID);
             }
+        }, emptyCart(state) {
+            state.items = [];
+            state.totalQuantity = 0;
+            state.totalPrice = 0;
         },
     },
 });
 
 // Export actions and reducer
-export const { fetchCart, addItem, updateItemQuantity, removeItem } = cartSlice.actions;
+export const { fetchCart, addItem, updateItemQuantity, removeItem, emptyCart } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;

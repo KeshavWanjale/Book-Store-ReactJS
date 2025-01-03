@@ -13,6 +13,8 @@ import {
 import { Rating } from "@mui/material";
 import bookImage from "../../assets/education/education.png";
 import { useDispatch, useSelector } from "react-redux";
+import { addBooksToCartApi, removeBooksFromCartApi, updateBooksFromCartApi } from "../../utils/apis";
+
 
 export default function BookDetails() {
     const { id } = useParams();
@@ -27,6 +29,8 @@ export default function BookDetails() {
 
     // Check if the current book is in the cart
     const cartItem = cartItems.find((item) => item.bookID === book?.id);
+
+    const user = localStorage.getItem("accessToken");
 
     if (!book) {
         return (
@@ -43,6 +47,13 @@ export default function BookDetails() {
             type: "cart/addItem",
             payload: { bookID: book.id, bookName: book.name, price: book.price, quantity: 1 },
         });
+        if (user) {
+            addBooksToCartApi({
+                book_id: book.id,
+                quantity: 1,
+            })
+        }
+
     };
 
     const handleIncreaseQuantity = () => {
@@ -50,6 +61,13 @@ export default function BookDetails() {
             type: "cart/updateItemQuantity",
             payload: { bookID: book.id, quantity: cartItem.quantity + 1 },
         });
+        if (user) {
+            updateBooksFromCartApi({
+                bookId: book.id,
+                bookQuantity: cartItem.quantity + 1
+            })
+        }
+
     };
 
     const handleDecreaseQuantity = () => {
@@ -58,8 +76,18 @@ export default function BookDetails() {
                 type: "cart/updateItemQuantity",
                 payload: { bookID: book.id, quantity: cartItem.quantity - 1 },
             });
+            if (user) {
+                updateBooksFromCartApi({
+                    bookId: book.id,
+                    bookQuantity: cartItem.quantity - 1
+                })
+            }
+
         } else {
             dispatch({ type: "cart/removeItem", payload: book.id });
+            if (user) {
+                removeBooksFromCartApi({ bookID: book.id })
+            }
         }
     };
 
