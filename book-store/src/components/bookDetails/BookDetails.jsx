@@ -1,5 +1,5 @@
 import "../bookDetails/BookDetail.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     Container,
     Typography,
@@ -14,21 +14,25 @@ import { Rating } from "@mui/material";
 import bookImage from "../../assets/education/education.png";
 import { useDispatch, useSelector } from "react-redux";
 import { addBooksToCartApi, removeBooksFromCartApi, updateBooksFromCartApi } from "../../utils/apis";
-
+import { useState } from "react";
+import { addToWishlist } from "../../redux/slice/wishlistSlice";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 export default function BookDetails() {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [isWishlist, setIsWishlist] = useState(false)
 
-    // Fetch books and cart items from the store
+
     const books = useSelector((state) => state.books.list);
     const cartItems = useSelector((state) => state.cart.items);
+    const wishlistItems = useSelector((state) => state.wishlist.items);
 
-    // Find the book based on the `id` parameter
     const book = books.find((book) => book.id === parseInt(id));
-
-    // Check if the current book is in the cart
     const cartItem = cartItems.find((item) => item.bookID === book?.id);
+    const wishlistItem = wishlistItems.find((item) => item.bookID === book?.id);
 
     const user = localStorage.getItem("accessToken");
 
@@ -86,10 +90,24 @@ export default function BookDetails() {
         } else {
             dispatch({ type: "cart/removeItem", payload: book.id });
             if (user) {
-                removeBooksFromCartApi({ bookID: book.id })
+                removeBooksFromCartApi({ bookID: book.id });
             }
         }
     };
+
+    const handleWishlist = () => {
+        dispatch(addToWishlist({
+            bookID: book.id,
+            bookName: book.name,
+            author: book.author,
+            price: book.price,
+        }));
+        setIsWishlist(true);
+    }
+
+    const goToWishlist = () => {
+        navigate("/wishlist")
+    }
 
     return (
         <Container>
@@ -132,9 +150,15 @@ export default function BookDetails() {
                             )}
                         </Grid>
                         <Grid item>
-                            <Button variant="outlined" color="secondary">
-                                WISHLIST
-                            </Button>
+                            {!isWishlist & !wishlistItem ? (
+                                <Button variant="outlined" color="secondary" onClick={handleWishlist}>
+                                    <FavoriteBorderOutlinedIcon /> WISHLIST
+                                </Button>
+                            ) : (
+                                <Button variant="outlined" color="secondary" onClick={goToWishlist}>
+                                    <FavoriteOutlinedIcon /> View WISHLIST
+                                </Button>
+                            )}
                         </Grid>
                     </Grid>
                 </Grid>

@@ -1,36 +1,25 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { fetchOrders } from '../../redux/slice/orderSlice';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { removeWishlist } from '../../redux/slice/wishlistSlice';
 import { useNavigate } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 
 
-export default function OrderList() {
+export default function WishList() {
+    const wishlistItems = useSelector((state) => state.wishlist.items);
     const dispatch = useDispatch();
-    const { books, loading, error } = useSelector((state) => state.orders);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        dispatch(fetchOrders());
-    }, [dispatch]);
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
-    if (books.length === 0) {
-        return (
-            <Typography variant="h4" sx={{ marginTop: "4rem" }}>
-                Order List is Empty
-            </Typography>
-        );
-    }
+    const handleDelete = (bookID) => {
+        dispatch(removeWishlist(bookID));
+    };
 
 
     return (
-
         <div style={{ width: "80%", margin: "auto", marginBlock: "45px" }}>
-            <Typography variant="h5" style={{ cursor: 'pointer' }} onClick={() => navigate("/books")}>
+            <Typography variant="h6" style={{ cursor: 'pointer' }} onClick={() => navigate("/books")}>
                 <HomeIcon />Home</Typography>
             <div
                 style={{
@@ -38,11 +27,11 @@ export default function OrderList() {
                     marginBottom: "20px",
                 }}
             >
-                <Typography variant="h5">My Orders</Typography>
-                {books.map((item, index) => {
+                <Typography variant="h5">My Wishlist ({wishlistItems.length})</Typography>
+                {wishlistItems.map((item, index) => {
                     return (
                         <div
-                            key={index}
+                            key={item.bookID}
                             style={{
                                 display: "flex",
                                 alignItems: "center",
@@ -58,17 +47,15 @@ export default function OrderList() {
                                 style={{ width: "100px", height: "130px" }}
                             />
                             <div style={{ width: "40%", marginLeft: "30px" }}>
-                                <Typography variant="h6">{item.name}</Typography>
+                                <Typography variant="h6">{item.bookName}</Typography>
                                 <Typography variant="body2">by {item.author}</Typography>
-                                <Typography variant="body2">quantity: {item.quantity}</Typography>
                                 <Typography variant="h6" color="primary">
                                     Rs. {item.price}
                                 </Typography>
                             </div>
-                            <div style={{ width: "30%", display: 'flex', justifyContent: "flex-end" }}>
-                                <Typography variant="h6" color="primary">
-                                    Placed on 1 jan 2025
-                                </Typography>
+                            <div style={{ width: "30%", display: 'flex', justifyContent: "flex-end" }}
+                                onClick={() => handleDelete(item.bookID)}>
+                                <DeleteIcon style={{ cursor: 'pointer' }} />
                             </div>
                         </div>
                     );

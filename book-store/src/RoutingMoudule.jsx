@@ -7,6 +7,7 @@ import OrderPlaced from './components/orderPlaced/OrderPlaced';
 import CartContainer from './components/cartContainer/CartContainer';
 import LoginModal from './components/loginModal/LoginModal';
 import OrderList from './components/orderList/OrderList';
+import WishList from './components/wishList/WishList';
 
 export default function RoutingMoudule() {
     const AppRoutes = createBrowserRouter([
@@ -37,6 +38,10 @@ export default function RoutingMoudule() {
                 {
                     path: "/order-list",
                     element: <OrderList />,
+                },
+                {
+                    path: "/wishlist",
+                    element: <WishList />,
                 }
             ],
         },

@@ -64,6 +64,10 @@ export default function NavBar() {
         navigate("/order-list")
     }
 
+    const goToWishlist = () => {
+        navigate("/wishlist")
+    }
+
     return (
         <AppBar position="fixed" color="primary" className="app-bar">
             <Toolbar className="toolbar">
@@ -114,7 +118,7 @@ export default function NavBar() {
                                         <OrdersIcon style={{ marginRight: 8 }} />
                                         My Orders
                                     </MenuItem>,
-                                    <MenuItem>
+                                    <MenuItem onClick={goToWishlist}>
                                         <WishlistIcon style={{ marginRight: 8 }} />
                                         My Wishlist
                                     </MenuItem>,
@@ -129,13 +133,13 @@ export default function NavBar() {
                                         Login/Signup
                                     </MenuItem>,
                                     <Tooltip title="My Orders" arrow key="my-orders">
-                                        <MenuItem>
+                                        <MenuItem onClick={handleMyOrders}>
                                             <OrdersIcon style={{ marginRight: 8 }} />
                                             My Orders
                                         </MenuItem>
                                     </Tooltip>,
                                     <Tooltip title="My Wishlist" arrow key="my-wishlist">
-                                        <MenuItem>
+                                        <MenuItem onClick={goToWishlist}>
                                             <WishlistIcon style={{ marginRight: 8 }} />
                                             My Wishlist
                                         </MenuItem>

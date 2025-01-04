@@ -5,6 +5,8 @@ import logo from "../../assets/images/logo.png";
 import { LoginApiCall } from '../../utils/apis';
 import { syncCart } from '../../redux/slice/syncCart';
 import { useDispatch } from 'react-redux';
+import { fetchOrders } from '../../redux/slice/orderSlice';
+
 
 const modalStyle = {
     position: "absolute",
@@ -34,6 +36,7 @@ export default function LoginModal({ onSuccess }) {
                 console.log('Login successful:', response);
                 alert('Login successful');
                 dispatch(syncCart())
+                dispatch(fetchOrders());
                 onSuccess()
             })
             .catch((err) => {
