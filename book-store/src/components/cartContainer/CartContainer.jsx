@@ -35,6 +35,7 @@ export default function CartContainer() {
     const [existingAddress, setExistingAddress] = useState("");
     const addresses = useSelector((state) => state.address.addresses);
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
+    const [isAddNewAddress, setIsAddNewAddress] = useState(false)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -136,10 +137,15 @@ export default function CartContainer() {
         } else {
             alert("Please fill in all address fields.");
         }
+        setIsAddNewAddress(false)
     };
 
+    const handleAddNewAddress = () => {
+        setIsAddNewAddress(true);
+    }
+
     const handleContinue = () => {
-        if (existingAddress || (address.fullName && address.phone)) {
+        if (existingAddress) {
             setIsOrderSummaryOpen(true);
         } else {
             alert("Please select or enter an address.");
@@ -243,74 +249,81 @@ export default function CartContainer() {
 
                 <Collapse in={isPlaceOrder}>
                     <Box sx={{ border: "0.5px solid black", padding: "20px" }}>
-                        <RadioGroup
-                            value={existingAddress}
-                            onChange={(e) => setExistingAddress(e.target.value)}
-                        >
-                            {addresses.map((addr, index) => (
-                                <FormControlLabel
-                                    key={index}
-                                    value={addr.fullName}
-                                    control={<Radio />}
-                                    label={`${addr.fullName} - ${addr.phone}, ${addr.addressLine}, ${addr.city}, ${addr.state}`}
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <Typography variant="subtitle1" marginY={1}>
+                                Customer Details
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleAddNewAddress}
+                            >
+                                Add New Address
+                            </Button>
+                        </div>
+
+                        <Collapse in={addresses.length === 0 || isAddNewAddress}>
+                            <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
+                                <TextField
+                                    label="Full Name"
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    style={{ flex: 1 }}
+                                    value={address.fullName}
+                                    onChange={(e) =>
+                                        setAddress({ ...address, fullName: e.target.value })
+                                    }
                                 />
-                            ))}
-                        </RadioGroup>
-                        <Typography variant="subtitle1" marginY={1}>
-                            Add New Address
-                        </Typography>
-                        <TextField
-                            label="Full Name"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            value={address.fullName}
-                            onChange={(e) =>
-                                setAddress({ ...address, fullName: e.target.value })
-                            }
-                        />
-                        <TextField
-                            label="Mobile Number"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            type="number"
-                            value={address.phone}
-                            onChange={(e) =>
-                                setAddress({ ...address, phone: e.target.value })
-                            }
-                        />
-                        <TextField
-                            label="Address"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            multiline
-                            rows={3}
-                            value={address.addressLine}
-                            onChange={(e) =>
-                                setAddress({ ...address, addressLine: e.target.value })
-                            }
-                        />
-                        <TextField
-                            label="City/Town"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            value={address.city}
-                            onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                        />
-                        <TextField
-                            label="State"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            value={address.state}
-                            onChange={(e) =>
-                                setAddress({ ...address, state: e.target.value })
-                            }
-                        />
-                        <Box display="flex" justifyContent="flex-end" marginTop="10px">
+                                <TextField
+                                    label="Mobile Number"
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    type="number"
+                                    style={{ flex: 1 }}
+                                    value={address.phone}
+                                    onChange={(e) =>
+                                        setAddress({ ...address, phone: e.target.value })
+                                    }
+                                />
+                            </div>
+                            <TextField
+                                label="Address"
+                                variant="outlined"
+                                fullWidth
+                                margin="normal"
+                                multiline
+                                rows={3}
+                                value={address.addressLine}
+                                onChange={(e) =>
+                                    setAddress({ ...address, addressLine: e.target.value })
+                                }
+                            />
+                            <div style={{ display: "flex", gap: "16px", marginTop: "16px" }}>
+                                <TextField
+                                    label="City/Town"
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    style={{ flex: 1 }}
+                                    value={address.city}
+                                    onChange={(e) =>
+                                        setAddress({ ...address, city: e.target.value })
+                                    }
+                                />
+                                <TextField
+                                    label="State"
+                                    variant="outlined"
+                                    fullWidth
+                                    margin="normal"
+                                    style={{ flex: 1 }}
+                                    value={address.state}
+                                    onChange={(e) =>
+                                        setAddress({ ...address, state: e.target.value })
+                                    }
+                                />
+                            </div>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -318,6 +331,45 @@ export default function CartContainer() {
                             >
                                 Add Address
                             </Button>
+                        </Collapse>
+
+
+                        <RadioGroup
+                            value={existingAddress}
+                            onChange={(e) => setExistingAddress(e.target.value)}
+                        >
+                            {addresses.map((addr, index) => (
+                                <div key={index} style={{ marginBottom: "16px" }}>
+                                    <FormControlLabel
+                                        value={addr.fullName}
+                                        control={<Radio />}
+                                        label={`Address ${index + 1}`}
+                                    />
+                                    <Box
+                                        style={{
+                                            border: "1px solid #ccc",
+                                            borderRadius: "8px",
+                                            padding: "8px",
+                                            marginTop: "8px",
+                                        }}
+                                    >
+                                        <Typography variant="body1">
+                                            <strong>Full Name:</strong> {addr.fullName}, <strong>Mobile:</strong> {addr.phone}
+                                        </Typography>
+                                        <Typography variant="body1">
+                                            <strong>Address:</strong> {addr.addressLine}
+                                        </Typography>
+                                        <Typography variant="body1">
+                                            <strong>City:</strong> {addr.city}, <strong>State:</strong> {addr.state}
+                                        </Typography>
+                                    </Box>
+                                </div>
+                            ))}
+                        </RadioGroup>
+
+
+                        <Box display="flex" justifyContent="flex-end" marginTop="10px">
+
                             <Button
                                 variant="contained"
                                 color="primary"
