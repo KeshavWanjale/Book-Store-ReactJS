@@ -8,6 +8,7 @@ import CartContainer from './components/cartContainer/CartContainer';
 import LoginModal from './components/loginModal/LoginModal';
 import OrderList from './components/orderList/OrderList';
 import WishList from './components/wishList/WishList';
+import ProfilePage from './components/profilePage/ProfilePage';
 
 export default function RoutingMoudule() {
     const AppRoutes = createBrowserRouter([
@@ -42,6 +43,10 @@ export default function RoutingMoudule() {
                 {
                     path: "/wishlist",
                     element: <WishList />,
+                },
+                {
+                    path: "/profile",
+                    element: <ProfilePage />,
                 }
             ],
         },

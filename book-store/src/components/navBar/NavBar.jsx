@@ -110,7 +110,7 @@ export default function NavBar() {
                             {user ? (
                                 [
                                     <MenuItem key="hello-user">Hello User</MenuItem>,
-                                    <MenuItem key="profile">
+                                    <MenuItem key="profile" onClick={() => navigate("/profile")}>
                                         <AccountCircle />
                                         Profile
                                     </MenuItem>,
