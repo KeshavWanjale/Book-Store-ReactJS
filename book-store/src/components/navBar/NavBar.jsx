@@ -38,6 +38,8 @@ export default function NavBar() {
     const isMenuOpen = Boolean(anchorEl);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const userName = localStorage.getItem("username");
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -98,7 +100,7 @@ export default function NavBar() {
                         >
                             <AccountCircle />
                         </IconButton>
-                        <Typography className="icon-label">Profile</Typography>
+                        <Typography className="icon-label">{userName ? userName : "Profile"}</Typography>
                         <Menu
                             anchorEl={anchorEl}
                             open={isMenuOpen}
@@ -109,7 +111,7 @@ export default function NavBar() {
                         >
                             {user ? (
                                 [
-                                    <MenuItem key="hello-user">Hello User</MenuItem>,
+                                    <MenuItem key="hello-user">Hello {userName ? userName : "user"}</MenuItem>,
                                     <MenuItem key="profile" onClick={() => navigate("/profile")}>
                                         <AccountCircle />
                                         Profile
@@ -150,7 +152,7 @@ export default function NavBar() {
                     </div>
 
 
-                    <div className="icon-container" onClick={() => navigate("/cart")}>
+                    <div className="icon-container" style={{ cursor: "pointer" }} onClick={() => navigate("/cart")}>
                         <Badge badgeContent={numberOfCartItems} color="error">
                             <ShoppingCart className="icon cart-icon" />
                         </Badge>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../loginModal/LoginModal.css";
 import { Box, TextField, Button } from "@mui/material";
 import logo from "../../assets/images/logo.png";
-import { LoginApiCall } from '../../utils/apis';
+import { LoginApiCall, RegisterApiCall } from '../../utils/apis';
 import { syncCart } from '../../redux/slice/syncCart';
 import { useDispatch } from 'react-redux';
 import { fetchOrders } from '../../redux/slice/orderSlice';
@@ -23,10 +23,14 @@ export default function LoginModal({ onSuccess }) {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
 
     const dispatch = useDispatch()
 
     const toggleForm = () => {
+        setEmail('');
+        setUsername('');
+        setPassword('');
         setIsLogin((prev) => !prev);
     };
 
@@ -35,6 +39,9 @@ export default function LoginModal({ onSuccess }) {
             .then((response) => {
                 console.log('Login successful:', response);
                 alert('Login successful');
+                setEmail('');
+                setUsername('');
+                setPassword('');
                 dispatch(syncCart())
                 dispatch(fetchOrders());
                 onSuccess()
@@ -44,6 +51,20 @@ export default function LoginModal({ onSuccess }) {
                 alert('Login failed, please try again.');
             });
     };
+
+    const handleSignup = () => {
+        RegisterApiCall({ email, username, password })
+            .then((response) => {
+                alert('Registration successful!');
+                toggleForm();
+                setEmail('');
+                setUsername('');
+                setPassword('');
+            })
+            .catch((err) => {
+                console.error('Register error:', err);
+            });
+    }
 
     return (
         <Box sx={modalStyle}>
@@ -111,12 +132,31 @@ export default function LoginModal({ onSuccess }) {
                         ) : (
                             <>
                                 <label>Name</label>
-                                <TextField size="small" fullWidth />
+                                <TextField
+                                    size="small"
+                                    fullWidth
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+
                                 <label>Email Id</label>
-                                <TextField size="small" fullWidth />
+                                <TextField
+                                    size="small"
+                                    fullWidth
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+
                                 <label>Password</label>
-                                <TextField size="small" type="password" fullWidth />
-                                <Button variant="contained" style={{ marginTop: "20px" }}>
+                                <TextField
+                                    size="small"
+                                    type="password"
+                                    fullWidth
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+
+                                <Button variant="contained" style={{ marginTop: "20px" }} onClick={handleSignup}>
                                     Signup
                                 </Button>
                             </>

@@ -2,14 +2,12 @@ import StarIcon from "@mui/icons-material/Star";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const BookCard = ({ book }) => {
+const BookCard = ({ book, image }) => {
     return (
         <Link to={`/books/${book.id}`} style={styles.link}>
             <div style={styles.card}>
                 <div style={styles.imageContainer}>
-                    <div style={styles.placeholder} aria-label="Image not available">
-                        Image not available
-                    </div>
+                    <img src={image} alt="bookImage" />
                 </div>
                 <div style={styles.content}>
                     <div style={styles.title} title={book.name}>
@@ -78,10 +76,6 @@ const styles = {
         maxHeight: "100%",
         objectFit: "cover",
         borderRadius: "4px",
-    },
-    placeholder: {
-        color: "#999",
-        fontSize: "14px",
     },
     content: {
         textAlign: "left",

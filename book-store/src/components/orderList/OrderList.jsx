@@ -4,6 +4,7 @@ import { fetchOrders } from '../../redux/slice/orderSlice';
 import { Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
+import booksArr from '../../assets/booksArray/booksArray';
 
 
 export default function OrderList() {
@@ -53,7 +54,7 @@ export default function OrderList() {
                             }}
                         >
                             <img
-                                src={"/placeholder-image.jpg"}
+                                src={booksArr[item.id % booksArr.length].image}
                                 alt={"book"}
                                 style={{ width: "100px", height: "130px" }}
                             />

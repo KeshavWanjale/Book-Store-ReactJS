@@ -25,6 +25,8 @@ import { useNavigate } from 'react-router-dom';
 import { syncCart } from '../../redux/slice/syncCart';
 import { placeOrderApi, removeBooksFromCartApi, updateBooksFromCartApi } from '../../utils/apis';
 import { emptyCart } from '../../redux/slice/cartSlice';
+import HomeIcon from '@mui/icons-material/Home';
+import booksArr from '../../assets/booksArray/booksArray';
 
 
 export default function CartContainer() {
@@ -53,6 +55,14 @@ export default function CartContainer() {
     if (cartItems.length === 0) {
         return (
             <Container>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <Typography variant="h6" style={{ cursor: 'pointer' }} onClick={() => navigate("/books")}>
+                        <HomeIcon />Home
+                    </Typography>
+                    <Typography variant="h8"  >
+                        /Cart
+                    </Typography>
+                </div>
                 <Typography variant="h4" sx={{ marginTop: "4rem" }}>
                     Cart Is Empty!!!
                 </Typography>
@@ -161,6 +171,14 @@ export default function CartContainer() {
 
     return (
         <div style={{ width: "80%", margin: "auto", marginBlock: "45px" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography variant="h6" style={{ cursor: 'pointer' }} onClick={() => navigate("/books")}>
+                    <HomeIcon />Home
+                </Typography>
+                <Typography variant="h8"  >
+                    /Cart
+                </Typography>
+            </div>
             <div
                 style={{
                     border: "1px solid black",
@@ -170,7 +188,7 @@ export default function CartContainer() {
                 }}
             >
                 <Typography variant="h5">My Cart ({cartItems.length} items)</Typography>
-                {cartItems.map((item) => {
+                {cartItems.map((item, index) => {
                     const book = books.find((book) => book.id === item.bookID);
                     return (
                         <div
@@ -179,13 +197,12 @@ export default function CartContainer() {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                border: "0.5px solid black",
                                 padding: "10px",
                                 margin: "10px 0",
                             }}
                         >
                             <img
-                                src={"/placeholder-image.jpg"}
+                                src={booksArr[item.bookID % booksArr.length].image}
                                 alt={"book"}
                                 style={{ width: "100px", height: "130px" }}
                             />

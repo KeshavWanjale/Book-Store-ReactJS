@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { removeWishlist } from '../../redux/slice/wishlistSlice';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
+import booksArr from '../../assets/booksArray/booksArray';
 
 
 export default function WishList() {
@@ -19,15 +20,31 @@ export default function WishList() {
 
     return (
         <div style={{ width: "80%", margin: "auto", marginBlock: "45px" }}>
-            <Typography variant="h6" style={{ cursor: 'pointer' }} onClick={() => navigate("/books")}>
-                <HomeIcon />Home</Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography variant="h6" style={{ cursor: 'pointer' }} onClick={() => navigate("/books")}>
+                    <HomeIcon />Home
+                </Typography>
+                <Typography variant="h8"  >
+                    /Wishlist
+                </Typography>
+            </div>
+
             <div
                 style={{
                     padding: "20px",
                     marginBottom: "20px",
                 }}
             >
-                <Typography variant="h5">My Wishlist ({wishlistItems.length})</Typography>
+                <div style={{
+                    display: "flex",
+                    border: "0.5px black",
+                    padding: "10px",
+                    background: "#F5F5F5"
+                }}
+                >
+                    <Typography variant="h5">My Wishlist ({wishlistItems.length})</Typography>
+                </div>
+
                 {wishlistItems.map((item, index) => {
                     return (
                         <div
@@ -38,11 +55,10 @@ export default function WishList() {
                                 justifyContent: "space-around",
                                 border: "0.5px solid black",
                                 padding: "10px",
-                                margin: "10px 0",
                             }}
                         >
                             <img
-                                src={"/placeholder-image.jpg"}
+                                src={booksArr[item.bookID % booksArr.length].image}
                                 alt={"book"}
                                 style={{ width: "100px", height: "130px" }}
                             />

@@ -2,6 +2,7 @@ import React from "react";
 import BookCard from '../bookCard/BookCard'
 import { Grid, Typography, Container, Pagination } from "@mui/material";
 import { useSelector } from "react-redux";
+import booksArr from "../../assets/booksArray/booksArray";
 
 const BookContainer = () => {
     const books = useSelector((state) => state.books.list);
@@ -32,12 +33,11 @@ const BookContainer = () => {
                 <Typography variant="h6" gutterBottom>
                     Books ({books.length} Items)
                 </Typography>
-                {/* <SortBar sort={sort} handleSortChange={handleSortChange} /> */}
             </div>
             <Grid container spacing={3}>
-                {currentBooks.map((book) => (
+                {currentBooks.map((book, index) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={book.id}>
-                        <BookCard book={book} />
+                        <BookCard book={book} image={booksArr[book.id % booksArr.length].image} />
                     </Grid>
                 ))}
             </Grid>

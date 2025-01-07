@@ -18,6 +18,7 @@ export const LoginApiCall = (loginData) => {
             const { data } = response;
             if (data.status === "success") {
                 localStorage.setItem('userEmail', data.data.email);
+                localStorage.setItem('username', data.data.username);
                 localStorage.setItem('accessToken', data.access);
             }
             return data;
@@ -96,7 +97,7 @@ export const addBooksToCartApi = async (bookData) => {
             throw new Error("User is not logged in");
         }
     } catch (error) {
-        console.error("Error Getting Cart For User:", error);
+        console.error("Error Adding Book to the Cart For User:", error);
         throw error;
     }
 }
